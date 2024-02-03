@@ -51,7 +51,7 @@ class RateUpdater(
                 val jsonResponse = JSONObject(latestRatesStatus.body)
                 if (!jsonResponse.getBoolean("success")) {
                     println("API request failed. Exiting application.")
-                    //exitApplication()
+                    exitApplication()
                 }
                 val jsonWithTimestamp = jsonResponse
                     .put("timestamp", Instant.now().toString())
