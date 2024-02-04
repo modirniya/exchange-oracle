@@ -20,7 +20,7 @@ class CurrencyConverter {
     }
 
     fun updateRates(jsonData: String) {
-        logger.debug("Updating rates with new JSON data")
+        logger.info("Updating rates with new JSON data")
         lock.write {
             try {
                 parseRates(jsonData)
@@ -41,10 +41,10 @@ class CurrencyConverter {
     }
 
     fun convert(amount: BigDecimal, fromCurrency: String, toCurrency: String): BigDecimal {
-        logger.debug("Converting amount: {} from {} to {}", amount, fromCurrency, toCurrency)
+        logger.info("Converting amount: {} from {} to {}", amount, fromCurrency, toCurrency)
 
         if (fromCurrency == toCurrency) {
-            logger.debug("From and to currencies are the same. No conversion needed.")
+            logger.info("From and to currencies are the same. No conversion needed.")
             return amount
         }
 

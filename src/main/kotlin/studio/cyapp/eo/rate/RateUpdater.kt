@@ -30,7 +30,7 @@ class RateUpdater(
 
     @PostConstruct
     fun init() {
-        logger.debug("Initializing RateUpdater")
+        logger.info("Initializing RateUpdater rev 1.b")
         if (ratesFile.exists()) {
             processExistingRatesFile()
         } else {
@@ -73,19 +73,21 @@ class RateUpdater(
             ratesFile.writeText(jsonWithTimestamp)
             currencyConverter.updateRates(jsonWithTimestamp)
         } else {
-            logger.error(
-                "API request failed.\ncode: {},type: {}\ninfo: {}\nExiting application.",
-                jsonResp.get("code"),
-                jsonResp.get("type"),
-                jsonResp.get("info")
-            )
+            jsonResp.getJSONObject("error").let {
+                logger.error(
+                    "API request failed.\ncode: {},type: {}\ninfo: {}\nExiting application.",
+                    it.get("code"),
+                    it.get("type"),
+                    it.get("info")
+                )
+            }
             exitApplication()
         }
     }
 
     private fun fetchRates(): Mono<WebsiteStatus> {
         val accessKey = System.getenv("FIXER_ACCESS_KEY") ?: "none"
-        logger.debug("Fetching rates with access key: $accessKey")
+        logger.info("Fetching rates with access key: $accessKey")
 
         return webClient.get()
             .uri("http://data.fixer.io/api/latest?access_key={accessKey}", accessKey)
