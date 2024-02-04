@@ -41,7 +41,7 @@ class CurrencyConverter {
     }
 
     fun convert(amount: BigDecimal, fromCurrency: String, toCurrency: String): BigDecimal {
-        logger.debug("Converting amount: $amount from $fromCurrency to $toCurrency")
+        logger.debug("Converting amount: {} from {} to {}", amount, fromCurrency, toCurrency)
 
         if (fromCurrency == toCurrency) {
             logger.debug("From and to currencies are the same. No conversion needed.")
