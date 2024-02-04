@@ -67,13 +67,18 @@ class RateUpdater(
     }
 
     private fun processSuccessfulFetch(responseBody: String?) {
-        val jsonResponse = JSONObject(responseBody)
-        if (jsonResponse.getBoolean("success")) {
-            val jsonWithTimestamp = jsonResponse.put("timestamp", Instant.now().toString()).toString()
+        val jsonResp = JSONObject(responseBody)
+        if (jsonResp.getBoolean("success")) {
+            val jsonWithTimestamp = jsonResp.put("timestamp", Instant.now().toString()).toString()
             ratesFile.writeText(jsonWithTimestamp)
             currencyConverter.updateRates(jsonWithTimestamp)
         } else {
-            logger.error("API request failed. Exiting application.")
+            logger.error(
+                "API request failed.\ncode: {},type: {}\ninfo: {}\nExiting application.",
+                jsonResp.get("code"),
+                jsonResp.get("type"),
+                jsonResp.get("info")
+            )
             exitApplication()
         }
     }
